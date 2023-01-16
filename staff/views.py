@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, views, response, status, viewsets, permissions
 from .serializers import *
 
@@ -33,14 +33,33 @@ class RegisterView(generics.GenericAPIView):
 
 class StudentViewset(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = []
 
 
 class ResourceViewset(viewsets.ModelViewSet):
     serializer_class = ResourceSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = []
 
 
-class CollectionViewset(viewsets.ModelViewSet):
+class MultipleFieldLookupMixin:
+    """
+    Apply this mixin to any view or viewset to get multiple field filtering
+    based on a `lookup_fields` attribute, instead of the default single field filtering.
+    """
+    def get_object(self):
+        queryset = self.get_queryset()             # Get the base queryset
+        queryset = self.filter_queryset(queryset)  # Apply any filter backends
+        filter = {}
+        for field in self.lookup_fields:
+            if self.kwargs.get(field): # Ignore empty fields.
+                filter[field] = self.kwargs[field]
+        obj = get_object_or_404(queryset, **filter)  # Lookup the object
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+
+class CollectionViewset(MultipleFieldLookupMixin,viewsets.ModelViewSet):
     serializer_class = CollectionSerializer
     permission_classes = []
+    queryset = Collection.objects.all()
+    lookup_fields = ['student', 'resource']

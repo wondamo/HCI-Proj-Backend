@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from rest_framework.authtoken.models import Token
+from datetime import timedelta, date, datetime
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -52,7 +53,7 @@ class Student(models.Model):
     firstname = models.CharField(max_length=20)
     surname = models.CharField(max_length=20)
     department = models.CharField(max_length=25)
-    reg_no = models.PositiveIntegerField()
+    reg_no = models.CharField(primary_key=True, max_length=8)
 
 
 class Resource(models.Model):
@@ -64,9 +65,20 @@ class Resource(models.Model):
 
 
 class Collection(models.Model):
-    student = models.ManyToManyField(Student)
-    resource = models.ManyToManyField(Resource)
-    collection_date = models.DateField()
+    collection_id = models.CharField(max_length=25, primary_key=True)
+    reg_no = models.CharField(max_length=8)
+    resource_id = models.CharField(max_length=35)
+    collection_date = models.DateField(auto_now_add=True)
     return_date = models.DateField()
     returned = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
+
+    def slugify_id(self):
+        return f'{self.reg_no}_{self.resource_id}'
+
+    def save(self, *args, **kwargs):
+        self.return_date = date.today() + timedelta(weeks=2)
+        if not self.collection_id:
+            self.collection_id = self.slugify_id()
+        super(Collection, self).save(*args, **kwargs)
+        

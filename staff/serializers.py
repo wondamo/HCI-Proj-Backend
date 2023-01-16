@@ -50,3 +50,14 @@ class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = "__all__"
+        read_only_fields = ["collection_date", "return_date", "expired", "collection_id"]
+    
+    def validate(self, data):
+        try:
+            student = Student.objects.get(reg_no=data['reg_no'])
+            resource = Resource.objects.get(resource_id=data['resource_id'])
+            return data
+        except Student.DoesNotExist:
+            raise serializers.ValidationError("The student does not exist")
+        except Resource.DoesNotExist:
+            raise serializers.ValidationError("The resource does not exist")

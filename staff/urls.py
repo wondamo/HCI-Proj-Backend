@@ -9,11 +9,12 @@ student = StudentViewset.as_view({
 })
 
 resource = ResourceViewset.as_view({
-    'post':'create'
+    'post':'create',
 })
 
 collection = CollectionViewset.as_view({
-    'post':'create'
+    'post':'create',
+    'put':'update',
 })
 
 urlpatterns = [
