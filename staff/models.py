@@ -57,3 +57,16 @@ class Student(models.Model):
 
 class Resource(models.Model):
     resource_id = models.CharField(max_length=35, primary_key=True)
+    title = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    price = models.PositiveIntegerField()
+    author = models.CharField(max_length=35)
+
+
+class Collection(models.Model):
+    student = models.ManyToManyField(Student)
+    resource = models.ManyToManyField(Resource)
+    collection_date = models.DateField()
+    return_date = models.DateField()
+    returned = models.BooleanField(default=False)
+    expired = models.BooleanField(default=False)

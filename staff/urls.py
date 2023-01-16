@@ -7,8 +7,19 @@ app_name = 'staff'
 student = StudentViewset.as_view({
     'post':'create'
 })
+
+resource = ResourceViewset.as_view({
+    'post':'create'
+})
+
+collection = CollectionViewset.as_view({
+    'post':'create'
+})
+
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('register/', RegisterView.as_view(), name='register'),
-    path('student/', student, name='student')
+    path('student/', student, name='student'),
+    path('resource/', resource, name='resource'),
+    path('collection/', collection, name='collection'),
 ]

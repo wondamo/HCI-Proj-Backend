@@ -34,3 +34,13 @@ class RegisterView(generics.GenericAPIView):
 class StudentViewset(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class ResourceViewset(viewsets.ModelViewSet):
+    serializer_class = ResourceSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class CollectionViewset(viewsets.ModelViewSet):
+    serializer_class = CollectionSerializer
+    permission_classes = []
