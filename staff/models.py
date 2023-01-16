@@ -1,13 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-
+from rest_framework.authtoken.models import Token
 
 # Create your models here.
 class UserManager(BaseUserManager):
 
-    def create_user(self, email, password, **other_fields):
+    def create_user(self, email, password=None, **other_fields):
         email = self.normalize_email(email)
         user = self.model(email=email, **other_fields)
+        user.set_password(password)
         user.save()
         return user
 
@@ -32,7 +33,27 @@ class Staff(AbstractBaseUser):
     objects = UserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    def tokens(self):
+        token = Token.objects.get_or_create(user=self)
+        return token[0].key
+
+    def __str__(self):
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        return True
+        
+    def has_module_perms(self, app_label):
+        return True
+
     
+class Student(models.Model):
+    firstname = models.CharField(max_length=20)
+    surname = models.CharField(max_length=20)
+    department = models.CharField(max_length=25)
+    reg_no = models.PositiveIntegerField()
+
 
 class Resource(models.Model):
     resource_id = models.CharField(max_length=35, primary_key=True)

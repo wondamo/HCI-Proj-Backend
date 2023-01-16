@@ -16,7 +16,7 @@ class LoginSerializer(serializers.Serializer):
         return attrs
         
     def get_tokens(self, obj):
-        user = Staff.objects.get(email=obj.email)
+        user = Staff.objects.get(email=obj['email'])
         return user.tokens()
 
 
@@ -24,7 +24,7 @@ class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         extra_kwargs = {'password': {'write_only':True, 'min_length':6}}
-        exclude = ['is_staff', 'is_active', 'is_superuser']
+        exclude = ['is_staff', 'is_active', 'is_superuser', 'id', 'last_login']
 
     def create(self, data):
         password = data.pop('password', None)
@@ -32,3 +32,9 @@ class StaffSerializer(serializers.ModelSerializer):
         staff.set_password(password)
         staff.save()
         return staff
+
+    
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = "__all__"

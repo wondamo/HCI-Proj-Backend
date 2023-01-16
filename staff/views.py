@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics, views, response, status
+from rest_framework import generics, views, response, status, viewsets, permissions
 from .serializers import *
 
 # Create your views here.
@@ -30,3 +30,7 @@ class RegisterView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return response.Response(serializer.data, status=status.HTTP_200_OK)
+
+class StudentViewset(viewsets.ModelViewSet):
+    serializer_class = StudentSerializer
+    permission_classes = [permissions.IsAuthenticated]
