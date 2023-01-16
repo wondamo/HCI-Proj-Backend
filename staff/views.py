@@ -17,3 +17,16 @@ class LoginView(generics.GenericAPIView):
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except Staff.DoesNotExist:
             return response.Response("Staff does not exist", status=status.HTTP_400_BAD_REQUEST)
+
+    
+class RegisterView(generics.GenericAPIView):
+    '''
+    This is the view for registering staffs in the application
+    '''
+    serializer_class = StaffSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
