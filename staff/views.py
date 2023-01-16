@@ -34,11 +34,13 @@ class RegisterView(generics.GenericAPIView):
 class StudentViewset(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
     permission_classes = []
+    queryset = Student.objects.all()
 
 
 class ResourceViewset(viewsets.ModelViewSet):
     serializer_class = ResourceSerializer
     permission_classes = []
+    queryset = Resource.objects.all()
 
 
 class MultipleFieldLookupMixin:

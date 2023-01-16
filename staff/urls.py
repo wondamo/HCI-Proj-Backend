@@ -5,11 +5,13 @@ from .views import *
 app_name = 'staff'
 
 student = StudentViewset.as_view({
-    'post':'create'
+    'post':'create',
+    'get':'list',
 })
 
 resource = ResourceViewset.as_view({
     'post':'create',
+    'get':'list',
 })
 
 collection = CollectionViewset.as_view({
