@@ -19,6 +19,7 @@ class UserManager(BaseUserManager):
         other_fields.setdefault('is_superuser', True)
         return self.create_user(email, password, **other_fields)
 
+
 class Staff(AbstractBaseUser):
     firstname = models.CharField(max_length=20)
     lastname = models.CharField(max_length=20)

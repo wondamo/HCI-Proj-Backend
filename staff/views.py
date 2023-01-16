@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from rest_framework import generics, views, response, status, viewsets, permissions
+from rest_framework import generics, views, response, status, viewsets, permissions, filters
 from .serializers import *
 
 # Create your views here.
@@ -33,14 +33,16 @@ class RegisterView(generics.GenericAPIView):
 
 class StudentViewset(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
-    permission_classes = []
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Student.objects.all()
 
 
 class ResourceViewset(viewsets.ModelViewSet):
     serializer_class = ResourceSerializer
-    permission_classes = []
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Resource.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'author', 'location']
 
 
 class MultipleFieldLookupMixin:
@@ -62,6 +64,6 @@ class MultipleFieldLookupMixin:
 
 class CollectionViewset(MultipleFieldLookupMixin,viewsets.ModelViewSet):
     serializer_class = CollectionSerializer
-    permission_classes = []
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Collection.objects.all()
     lookup_fields = ['student', 'resource']
