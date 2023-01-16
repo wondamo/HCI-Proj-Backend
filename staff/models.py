@@ -53,6 +53,7 @@ class Student(models.Model):
     firstname = models.CharField(max_length=20)
     surname = models.CharField(max_length=20)
     department = models.CharField(max_length=25)
+    bill = models.PositiveIntegerField(default=0)
     reg_no = models.CharField(primary_key=True, max_length=8)
 
 
@@ -80,5 +81,10 @@ class Collection(models.Model):
         self.return_date = date.today() + timedelta(weeks=2)
         if not self.collection_id:
             self.collection_id = self.slugify_id()
+        if date.today() >= self.return_date:
+            self.expired=True
+            student = Student.objects.get(reg_no=self.reg_no)
+            student.bill += 100
+            student.save()
         super(Collection, self).save(*args, **kwargs)
         

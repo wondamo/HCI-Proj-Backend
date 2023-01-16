@@ -37,7 +37,7 @@ class StaffSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = "__all__"
+        exclude = ["bill"]
 
 
 class ResourceSerializer(serializers.ModelSerializer):
