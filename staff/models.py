@@ -84,7 +84,7 @@ class Collection(models.Model):
         if date.today() >= self.return_date:
             self.expired=True
             student = Student.objects.get(reg_no=self.reg_no)
-            student.bill += 100
+            student.bill += 2000
             student.save()
         super(Collection, self).save(*args, **kwargs)
         
