@@ -57,21 +57,9 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
     "http://localhost:5173",
     "http://localhost:5174",
-]
-
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://localhost:5174'
-)
-
-CSRF_TRUSTED_ORIGINS= [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://localhost:5174",
+    "https://resource-manager.vercel.app"
 ]
 
 ROOT_URLCONF = 'HciProj.urls'
